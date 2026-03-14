@@ -13,12 +13,18 @@ document.getElementById("formid").addEventListener("submit", function (e) {
     amount: document.getElementById("amount").value,
   };
 
-  users.push(user);
+  if (isEdit) {
+    const index = users.findIndex((u) => u.id === currentUser);
+    users[index] = user;
+    isEdit = false;
+    currentUser = null;
+  } else {
+    users.push(user);
+  }
 
   localStorage.setItem("users", JSON.stringify(users));
-
-  this.reset();
-  displayData();  
+  document.getElementById("formid").reset();
+  displayData();
 });
 
 //display stored transactions in table
@@ -38,7 +44,10 @@ function displayData() {
       <td>${u.income_exp}</td>
       <td>${u.desc}</td>
       <td>${u.amount}</td>
-      <td></td>
+        <td>
+        <button onclick="updateUser(${u.id})">Edit</button>
+        <button onclick="deleteUser(${u.id})">Delete</button>
+        </td>
       `;
 
     tbody.appendChild(tr);
@@ -47,3 +56,32 @@ function displayData() {
 
 displayData();
 
+//add edit and delete transaction functionality
+
+//update
+
+let isEdit = false;
+let currentUser = null;
+
+function updateUser(id) {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+
+  const user = users.find((u) => u.id === id);
+
+  document.getElementById("idate").value = user.idate;
+  document.getElementById("dropdown").value = user.income_exp;
+  document.getElementById("desc").value = user.desc;
+  document.getElementById("amount").value = user.amount;
+
+  isEdit = true;
+  currentUser = id;
+}
+
+//delete
+
+function deleteUser(id) {
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+  users = users.filter((u) => u.id !== id);
+  localStorage.setItem("users", JSON.stringify(users));
+  displayData();
+}
