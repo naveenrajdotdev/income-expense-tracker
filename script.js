@@ -18,4 +18,32 @@ document.getElementById("formid").addEventListener("submit", function (e) {
   localStorage.setItem("users", JSON.stringify(users));
 
   this.reset();
+  displayData();  
 });
+
+//display stored transactions in table
+
+function displayData() {
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const tbody = document.getElementById("tbody");
+
+  tbody.innerHTML = "";
+
+  users.forEach((u, index) => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${u.idate}</td>
+      <td>${u.income_exp}</td>
+      <td>${u.desc}</td>
+      <td>${u.amount}</td>
+      <td></td>
+      `;
+
+    tbody.appendChild(tr);
+  });
+}
+
+displayData();
+
