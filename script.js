@@ -52,6 +52,24 @@ function displayData() {
 
     tbody.appendChild(tr);
   });
+
+  //Netbalance
+  const totalIncome = users
+    .filter((u) => u.income_exp === "income")
+    .reduce((sum, u) => sum + Number(u.amount), 0);
+
+  const totalExpense = users
+    .filter((u) => u.income_exp === "expenses")
+    .reduce((sum, u) => sum + Number(u.amount), 0);
+
+  const netBalance = totalIncome - totalExpense;
+
+  //UI
+  document.getElementById("tincome").textContent = `Income: ₹ ${totalIncome}`;
+  document.getElementById("texpenses").textContent =
+    `Expenses: ₹ ${totalExpense}`;
+  document.getElementById("netbalance").textContent =
+    `Net Balance: ₹ ${netBalance}`;
 }
 
 displayData();
